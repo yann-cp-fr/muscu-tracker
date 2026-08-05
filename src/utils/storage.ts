@@ -7,10 +7,14 @@
 // sans toucher au reste de l'application. C'est le seul endroit
 // du code qui "sait" comment les données sont physiquement stockées.
 
-import type { WorkoutLog } from '../types'
+import type { WorkoutLog, Program } from '../types'
 
 const KEYS = {
   workouts: 'muscu:workouts',
+  // Programme importé par l'utilisateur. S'il est présent, il prime sur
+  // le program.json du dépôt. GitHub n'a aucun accès au LocalStorage,
+  // donc une mise à jour du code ne l'efface jamais.
+  program: 'muscu:program',
 } as const
 
 /** Lecture générique typée avec valeur par défaut si absent/corrompu */
@@ -66,5 +70,28 @@ export const storage = {
   /** Supprime une séance par son id */
   deleteWorkout(id: string): void {
     this.saveWorkouts(this.getWorkouts().filter((w) => w.id !== id))
+  },
+
+  // -----------------------------------------------------------
+  //  Programme importé (prioritaire sur le program.json du dépôt)
+  // -----------------------------------------------------------
+
+  /** Récupère le programme importé, ou null s'il n'y en a pas */
+  getProgram(): Program | null {
+    return read<Program | null>(KEYS.program, null)
+  },
+
+  /** Enregistre un programme importé (remplace le programme actif) */
+  saveProgram(program: Program): void {
+    write(KEYS.program, program)
+  },
+
+  /** Efface le programme importé → retour au programme par défaut du dépôt */
+  clearProgram(): void {
+    try {
+      localStorage.removeItem(KEYS.program)
+    } catch (e) {
+      console.error('Échec de suppression du programme :', e)
+    }
   },
 }
