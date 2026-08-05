@@ -1,0 +1,241 @@
+{
+  "name": "Reprise dos — Séances A/B",
+  "sessions": [
+    {
+      "name": "Séance A",
+      "exercises": [
+        {
+          "name": "Développé incliné haltères",
+          "muscleGroup": "Pectoraux (haut)",
+          "sets": 3,
+          "reps": "12",
+          "tempo": "3-1-1-0",
+          "rest": 90,
+          "targetWeight": 18,
+          "tips": [
+            "Banc à 30°, dos bien calé contre le dossier",
+            "Omoplates serrées et basses",
+            "Descente contrôlée, pas de rebond",
+            "Charge légère : finir avec 3-4 reps en réserve"
+          ]
+        },
+        {
+          "name": "Rowing poitrine-sur-banc incliné",
+          "muscleGroup": "Haut du dos",
+          "sets": 3,
+          "reps": "12-15",
+          "tempo": "2-1-2-1",
+          "rest": 90,
+          "targetWeight": 14,
+          "tips": [
+            "Poitrine calée sur l'appui incliné : zéro contrainte lombaire",
+            "Tire en menant avec les coudes",
+            "Serre les omoplates l'une vers l'autre en fin de course",
+            "Marque 1s de contraction en haut"
+          ]
+        },
+        {
+          "name": "Développé épaules assis dossier haltères",
+          "muscleGroup": "Épaules",
+          "sets": 3,
+          "reps": "12",
+          "tempo": "2-1-1-0",
+          "rest": 90,
+          "targetWeight": 12,
+          "tips": [
+            "Assis, dos plaqué au dossier vertical",
+            "Ne cambre pas le bas du dos",
+            "Ne verrouille pas les coudes en haut",
+            "Menton légèrement rentré"
+          ]
+        },
+        {
+          "name": "Écarté incliné haltères",
+          "muscleGroup": "Pectoraux",
+          "sets": 2,
+          "reps": "15",
+          "tempo": "3-1-1-0",
+          "rest": 60,
+          "targetWeight": 8,
+          "tips": [
+            "Coudes légèrement fléchis et fixes",
+            "Amplitude confortable, ne force pas l'étirement",
+            "Priorité à la sensation dans le pectoral"
+          ]
+        },
+        {
+          "name": "Curl biceps assis dossier",
+          "muscleGroup": "Biceps",
+          "sets": 3,
+          "reps": "12",
+          "tempo": "2-1-2-0",
+          "rest": 60,
+          "targetWeight": 10,
+          "tips": [
+            "Dos calé : le dossier empêche de balancer le buste",
+            "Coudes fixes le long du corps",
+            "Pas d'élan, contrôle la descente"
+          ]
+        },
+        {
+          "name": "Kickback triceps buste soutenu",
+          "muscleGroup": "Triceps",
+          "sets": 3,
+          "reps": "15",
+          "tempo": "2-1-1-1",
+          "rest": 60,
+          "targetWeight": 6,
+          "tips": [
+            "Buste soutenu par le banc incliné, pas de porte-à-faux lombaire",
+            "Coude haut et fixe",
+            "Extension complète, serre le triceps 1s"
+          ]
+        },
+        {
+          "name": "Gainage planche ventrale + latérale",
+          "muscleGroup": "Tronc",
+          "sets": 3,
+          "reps": "20-30s",
+          "tempo": "",
+          "rest": 45,
+          "tips": [
+            "Corps aligné, fessiers serrés, côtes rentrées",
+            "Anti-extension : ne creuse pas le bas du dos",
+            "Respire normalement, ne bloque pas"
+          ]
+        },
+        {
+          "name": "Dead bug",
+          "muscleGroup": "Tronc",
+          "sets": 3,
+          "reps": "8/côté",
+          "tempo": "lent",
+          "rest": 45,
+          "tips": [
+            "Bas du dos plaqué au sol en permanence",
+            "Mouvement lent et contrôlé bras/jambe opposés",
+            "Si le dos décolle, réduis l'amplitude"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Séance B",
+      "exercises": [
+        {
+          "name": "Développé couché haltères à plat",
+          "muscleGroup": "Pectoraux",
+          "sets": 3,
+          "reps": "12",
+          "tempo": "2-1-1-0",
+          "rest": 90,
+          "targetWeight": 20,
+          "tips": [
+            "Allongé, dos neutre : cambrure minimale",
+            "Omoplates serrées et basses",
+            "Descente contrôlée jusqu'à hauteur des pectoraux",
+            "Pieds bien à plat, pas de pont lombaire"
+          ]
+        },
+        {
+          "name": "Oiseau à plat ventre sur banc incliné",
+          "muscleGroup": "Deltoïde postérieur + rhomboïdes",
+          "sets": 3,
+          "reps": "15",
+          "tempo": "2-1-2-1",
+          "rest": 75,
+          "targetWeight": 6,
+          "tips": [
+            "À plat ventre sur le banc incliné : tronc totalement soutenu",
+            "Coudes légèrement fléchis et fixes",
+            "Écarte en serrant les omoplates",
+            "Charge légère, priorité à l'arrière d'épaule"
+          ]
+        },
+        {
+          "name": "Élévations latérales assis",
+          "muscleGroup": "Deltoïde moyen",
+          "sets": 3,
+          "reps": "15",
+          "tempo": "2-0-1-1",
+          "rest": 60,
+          "targetWeight": 6,
+          "tips": [
+            "Assis, dos calé, buste immobile",
+            "Monte jusqu'à l'horizontale, pas plus",
+            "Coudes légèrement fléchis, pas d'élan"
+          ]
+        },
+        {
+          "name": "Rowing poitrine-sur-banc incliné",
+          "muscleGroup": "Haut du dos",
+          "sets": 3,
+          "reps": "12",
+          "tempo": "2-1-2-1",
+          "rest": 90,
+          "targetWeight": 14,
+          "tips": [
+            "Poitrine calée sur l'appui incliné : zéro contrainte lombaire",
+            "Tire en menant avec les coudes",
+            "Serre les omoplates en fin de course"
+          ]
+        },
+        {
+          "name": "Curl marteau assis dossier",
+          "muscleGroup": "Biceps",
+          "sets": 3,
+          "reps": "12",
+          "tempo": "2-1-2-0",
+          "rest": 60,
+          "targetWeight": 10,
+          "tips": [
+            "Dos calé au dossier",
+            "Prise neutre (pouces vers le haut)",
+            "Coudes fixes, pas de balancier"
+          ]
+        },
+        {
+          "name": "Extension triceps couché barre au front",
+          "muscleGroup": "Triceps",
+          "sets": 3,
+          "reps": "12-15",
+          "tempo": "3-1-1-0",
+          "rest": 60,
+          "targetWeight": 12,
+          "tips": [
+            "Allongé sur banc plat, charge légère",
+            "Coudes fixes, seule l'articulation du coude bouge",
+            "Descente lente et contrôlée vers le front"
+          ]
+        },
+        {
+          "name": "Shrugs assis",
+          "muscleGroup": "Trapèzes",
+          "sets": 2,
+          "reps": "15",
+          "tempo": "2-1-2-0",
+          "rest": 60,
+          "targetWeight": 16,
+          "tips": [
+            "Assis, dos calé",
+            "Monte les épaules verticalement vers les oreilles",
+            "Marque 1s en haut, pas de rotation d'épaules"
+          ]
+        },
+        {
+          "name": "Bird dog",
+          "muscleGroup": "Tronc",
+          "sets": 3,
+          "reps": "8/côté",
+          "tempo": "lent",
+          "rest": 45,
+          "tips": [
+            "À quatre pattes, dos neutre (ni creusé ni rond)",
+            "Tends bras et jambe opposés lentement",
+            "Ne laisse pas le bassin basculer"
+          ]
+        }
+      ]
+    }
+  ]
+}
