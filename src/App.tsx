@@ -10,7 +10,10 @@ import { BottomNav } from './components/BottomNav'
 import { Dashboard } from './pages/Dashboard'
 import { Sessions } from './pages/Sessions'
 import { SessionActive } from './pages/SessionActive'
-import { History, Progress, Settings } from './pages/Placeholders'
+import { History } from './pages/History'
+import { WorkoutDetail } from './pages/WorkoutDetail'
+import { Progress } from './pages/Placeholders'
+import { Settings } from './pages/Settings'
 
 export default function App() {
   return (
@@ -22,6 +25,7 @@ export default function App() {
           <Route path="/sessions" element={<Sessions />} />
           <Route path="/session/:sessionId" element={<SessionActive />} />
           <Route path="/history" element={<History />} />
+          <Route path="/history/:workoutId" element={<WorkoutDetail />} />
           <Route path="/progress" element={<Progress />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>

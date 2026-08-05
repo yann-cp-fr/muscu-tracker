@@ -18,10 +18,22 @@ export function useWorkouts() {
     setWorkouts(storage.getWorkouts())
   }, [])
 
+  /** Met à jour une séance existante (édition) */
+  const updateWorkout = useCallback((workout: WorkoutLog) => {
+    storage.updateWorkout(workout)
+    setWorkouts(storage.getWorkouts())
+  }, [])
+
+  /** Supprime une séance */
+  const deleteWorkout = useCallback((id: string) => {
+    storage.deleteWorkout(id)
+    setWorkouts(storage.getWorkouts())
+  }, [])
+
   /** Remplace tout l'historique (rechargement après import, etc.) */
   const reload = useCallback(() => {
     setWorkouts(storage.getWorkouts())
   }, [])
 
-  return { workouts, addWorkout, reload }
+  return { workouts, addWorkout, updateWorkout, deleteWorkout, reload }
 }

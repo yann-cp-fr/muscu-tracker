@@ -172,7 +172,7 @@ export function SessionActive() {
                         })
                       }
                       placeholder={String(ex.targetWeight ?? 0)}
-                      className={`bg-surface-2 rounded-lg py-3 px-2 text-center text-lg font-semibold outline-none focus:ring-2 focus:ring-accent ${
+                      className={`w-full min-w-0 bg-surface-2 rounded-lg py-3 px-1 text-center text-lg font-semibold outline-none focus:ring-2 focus:ring-accent ${
                         set.done ? 'opacity-60' : ''
                       }`}
                     />
@@ -186,7 +186,7 @@ export function SessionActive() {
                         })
                       }
                       placeholder="0"
-                      className={`bg-surface-2 rounded-lg py-3 px-2 text-center text-lg font-semibold outline-none focus:ring-2 focus:ring-accent ${
+                      className={`w-full min-w-0 bg-surface-2 rounded-lg py-3 px-1 text-center text-lg font-semibold outline-none focus:ring-2 focus:ring-accent ${
                         set.done ? 'opacity-60' : ''
                       }`}
                     />
@@ -196,7 +196,7 @@ export function SessionActive() {
                           ? updateSet(exIndex, setIndex, { done: false })
                           : validateSet(exIndex, setIndex, ex.rest)
                       }
-                      className={`h-12 rounded-lg text-xl font-bold transition-colors active:scale-95 ${
+                      className={`w-full h-12 rounded-lg text-xl font-bold transition-colors active:scale-95 ${
                         set.done
                           ? 'bg-success text-white'
                           : 'bg-surface-2 text-muted active:bg-border'

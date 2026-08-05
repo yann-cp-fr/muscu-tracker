@@ -56,4 +56,15 @@ export const storage = {
     all.push(workout)
     this.saveWorkouts(all)
   },
+
+  /** Remplace une séance existante (édition d'une séance passée) */
+  updateWorkout(updated: WorkoutLog): void {
+    const all = this.getWorkouts().map((w) => (w.id === updated.id ? updated : w))
+    this.saveWorkouts(all)
+  },
+
+  /** Supprime une séance par son id */
+  deleteWorkout(id: string): void {
+    this.saveWorkouts(this.getWorkouts().filter((w) => w.id !== id))
+  },
 }
