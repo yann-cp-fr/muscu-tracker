@@ -12,7 +12,7 @@ import { Sessions } from './pages/Sessions'
 import { SessionActive } from './pages/SessionActive'
 import { History } from './pages/History'
 import { WorkoutDetail } from './pages/WorkoutDetail'
-import { Progress } from './pages/Placeholders'
+import { Progress } from './pages/Progress'
 import { Settings } from './pages/Settings'
 
 export default function App() {

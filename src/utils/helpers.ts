@@ -42,3 +42,27 @@ export function formatTime(totalSeconds: number): string {
   const s = totalSeconds % 60
   return `${m}:${String(s).padStart(2, '0')}`
 }
+
+/** Renvoie le lundi (début de semaine ISO) de la date donnée, à minuit.
+ *  Sert à regrouper les séances par semaine pour le volume hebdomadaire. */
+export function startOfWeek(iso: string): Date {
+  const d = new Date(iso)
+  d.setHours(0, 0, 0, 0)
+  // getDay() : 0 = dimanche, 1 = lundi… On ramène au lundi.
+  const day = (d.getDay() + 6) % 7 // 0 = lundi
+  d.setDate(d.getDate() - day)
+  return d
+}
+
+/** Clé de semaine stable (AAAA-MM-JJ du lundi), pour regrouper */
+export function weekKey(iso: string): string {
+  return startOfWeek(iso).toISOString().slice(0, 10)
+}
+
+/** Libellé court de semaine pour l'axe des graphiques (ex "5 août") */
+export function weekLabel(weekStartIso: string): string {
+  return new Date(weekStartIso).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'short',
+  })
+}
