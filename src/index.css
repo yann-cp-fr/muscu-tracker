@@ -34,3 +34,17 @@
     @apply bg-surface border border-border rounded-2xl;
   }
 }
+
+@layer base {
+  /* Confort tactile en salle : pas de sélection de texte involontaire sur
+     les éléments interactifs, pas de surbrillance bleue au tap. */
+  button,
+  a,
+  label,
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation; /* supprime le délai + le zoom double-tap */
+  }
+}
