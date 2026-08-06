@@ -7,7 +7,7 @@
 // sans toucher au reste de l'application. C'est le seul endroit
 // du code qui "sait" comment les données sont physiquement stockées.
 
-import type { WorkoutLog, Program } from '../types'
+import type { WorkoutLog, Program, AppSettings, ActiveSession } from '../types'
 
 const KEYS = {
   workouts: 'muscu:workouts',
@@ -15,6 +15,10 @@ const KEYS = {
   // le program.json du dépôt. GitHub n'a aucun accès au LocalStorage,
   // donc une mise à jour du code ne l'efface jamais.
   program: 'muscu:program',
+  // Séance en cours (reprise après fermeture de l'app)
+  activeSession: 'muscu:activeSession',
+  // Préférences (son, écran allumé…)
+  settings: 'muscu:settings',
 } as const
 
 /** Lecture générique typée avec valeur par défaut si absent/corrompu */
@@ -92,6 +96,42 @@ export const storage = {
       localStorage.removeItem(KEYS.program)
     } catch (e) {
       console.error('Échec de suppression du programme :', e)
+    }
+  },
+
+  // -----------------------------------------------------------
+  //  Préférences (son, écran allumé)
+  // -----------------------------------------------------------
+
+  getSettings(): AppSettings {
+    // Valeurs par défaut : son activé, écran maintenu allumé
+    return read<AppSettings>(KEYS.settings, {
+      soundEnabled: true,
+      keepAwake: true,
+    })
+  },
+
+  saveSettings(settings: AppSettings): void {
+    write(KEYS.settings, settings)
+  },
+
+  // -----------------------------------------------------------
+  //  Séance en cours (reprise après fermeture)
+  // -----------------------------------------------------------
+
+  getActiveSession(): ActiveSession | null {
+    return read<ActiveSession | null>(KEYS.activeSession, null)
+  },
+
+  saveActiveSession(active: ActiveSession): void {
+    write(KEYS.activeSession, active)
+  },
+
+  clearActiveSession(): void {
+    try {
+      localStorage.removeItem(KEYS.activeSession)
+    } catch (e) {
+      console.error('Échec de suppression de la séance en cours :', e)
     }
   },
 }

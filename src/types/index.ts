@@ -68,3 +68,25 @@ export interface WorkoutLog {
   date: string
   exercises: ExerciseLog[]
 }
+
+// -------------------------------------------------------------
+//  V4.5 — préférences & séance en cours
+// -------------------------------------------------------------
+
+/** Préférences utilisateur (stockées localement) */
+export interface AppSettings {
+  /** bips de fin de repos */
+  soundEnabled: boolean
+  /** garder l'écran allumé pendant la séance */
+  keepAwake: boolean
+}
+
+/** Séance en cours de saisie, sauvegardée pour reprise après fermeture */
+export interface ActiveSession {
+  sessionId: string
+  sessionName: string
+  /** date ISO de démarrage */
+  startedAt: string
+  /** l'état de saisie (mêmes logs que dans l'écran de séance) */
+  logs: ExerciseLog[]
+}

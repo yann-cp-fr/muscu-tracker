@@ -10,6 +10,7 @@
 import { useRef, useState } from 'react'
 import { useWorkouts } from '../hooks/useWorkouts'
 import { useProgram, useIsImportedProgram } from '../hooks/useProgram'
+import { useSettings } from '../hooks/useSettings'
 import {
   downloadBackup,
   importBackup,
@@ -26,6 +27,7 @@ export function Settings() {
   const { workouts, reload } = useWorkouts()
   const program = useProgram()
   const isImported = useIsImportedProgram()
+  const { settings, update } = useSettings()
 
   // Deux sélecteurs de fichiers distincts pour éviter toute confusion
   const backupInputRef = useRef<HTMLInputElement>(null)
@@ -85,6 +87,26 @@ export function Settings() {
   return (
     <div className="pb-4">
       <PageHeader title="Réglages" subtitle="Données et programme" />
+
+      {/* ============ SECTION SÉANCE (préférences) ============ */}
+      <h2 className="text-sm font-bold text-muted uppercase tracking-wide mb-2">
+        Pendant la séance
+      </h2>
+      <Card className="mb-6">
+        <ToggleRow
+          label="Bips de fin de repos"
+          description="Trois bips dans les dernières secondes du repos."
+          checked={settings.soundEnabled}
+          onChange={(v) => update({ soundEnabled: v })}
+        />
+        <div className="h-px bg-border my-3" />
+        <ToggleRow
+          label="Garder l'écran allumé"
+          description="Empêche la mise en veille pendant l'entraînement."
+          checked={settings.keepAwake}
+          onChange={(v) => update({ keepAwake: v })}
+        />
+      </Card>
 
       {/* ============ SECTION DONNÉES ============ */}
       <h2 className="text-sm font-bold text-muted uppercase tracking-wide mb-2">
@@ -247,6 +269,43 @@ export function Settings() {
           <p className="text-sm">{message.text}</p>
         </Card>
       )}
+    </div>
+  )
+}
+
+/** Ligne avec libellé + description + interrupteur (style iOS) */
+function ToggleRow({
+  label,
+  description,
+  checked,
+  onChange,
+}: {
+  label: string
+  description: string
+  checked: boolean
+  onChange: (v: boolean) => void
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <div className="min-w-0">
+        <div className="font-semibold">{label}</div>
+        <div className="text-muted text-xs mt-0.5">{description}</div>
+      </div>
+      <button
+        role="switch"
+        aria-checked={checked}
+        aria-label={label}
+        onClick={() => onChange(!checked)}
+        className={`relative w-12 h-7 rounded-full shrink-0 transition-colors ${
+          checked ? 'bg-accent' : 'bg-surface-2'
+        }`}
+      >
+        <span
+          className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform ${
+            checked ? 'translate-x-5' : ''
+          }`}
+        />
+      </button>
     </div>
   )
 }

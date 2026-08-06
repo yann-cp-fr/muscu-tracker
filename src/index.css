@@ -48,3 +48,11 @@
     touch-action: manipulation; /* supprime le délai + le zoom double-tap */
   }
 }
+
+@layer utilities {
+  /* Animation d'apparition de la modale de résumé (discrète) */
+  @keyframes slideUp {
+    from { transform: translateY(12px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+}
