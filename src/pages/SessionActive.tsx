@@ -23,13 +23,27 @@ import { CollapsibleTips } from '../components/CollapsibleTips'
 import { RestTimer } from '../components/RestTimer'
 import { Stepper } from '../components/Stepper'
 import { SessionSummary } from '../components/SessionSummary'
-import { makeId, formatShortDate } from '../utils/helpers'
+import { AddExerciseForm } from '../components/AddExerciseForm'
+import type { KnownExercise } from '../components/AddExerciseForm'
+import { useProgram } from '../hooks/useProgram'
+import { makeId, formatShortDate, slugify } from '../utils/helpers'
 import { storage } from '../utils/storage'
 import { unlockAudio, beepTick, beepEnd } from '../utils/audio'
 import type { ExerciseLog, SetLog, WorkoutLog } from '../types'
 
 const WEIGHT_STEP = 2.5
 const REPS_STEP = 1
+// Repos par défaut (en s) pour un exercice ajouté à la volée
+const EXTRA_DEFAULT_REST = 60
+
+/** Métadonnées d'affichage d'un exercice du programme (repos, reps, tips…) */
+interface ExerciseMeta {
+  reps: string
+  tempo?: string
+  rest: number
+  targetWeight?: number
+  tips?: string[]
+}
 
 function buildInitialLogs(
   session: NonNullable<ReturnType<typeof useSession>>,
@@ -54,6 +68,7 @@ function buildInitialLogs(
 export function SessionActive() {
   const { sessionId } = useParams()
   const session = useSession(sessionId)
+  const program = useProgram()
   const { workouts, addWorkout } = useWorkouts()
   const lastPerf = useLastPerformance(workouts)
   const { settings } = useSettings()
@@ -94,6 +109,42 @@ export function SessionActive() {
 
   const [showRpe, setShowRpe] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
+  const [showAddForm, setShowAddForm] = useState(false)
+
+  // Métadonnées d'affichage par exerciseId (repos, reps, tempo, tips…),
+  // issues du programme. Les exercices ajoutés à la volée n'y figurent pas
+  // et utilisent leurs propres valeurs (voir plus bas).
+  const metaById = useMemo(() => {
+    const m = new Map<string, ExerciseMeta>()
+    if (session) {
+      for (const ex of session.exercises) {
+        m.set(ex.id!, {
+          reps: ex.reps,
+          tempo: ex.tempo,
+          rest: ex.rest,
+          targetWeight: ex.targetWeight,
+          tips: ex.tips,
+        })
+      }
+    }
+    return m
+  }, [session])
+
+  // Liste des exercices connus (tout le programme) pour le menu déroulant,
+  // dédoublonnée par nom.
+  const knownExercises = useMemo<KnownExercise[]>(() => {
+    const seen = new Set<string>()
+    const list: KnownExercise[] = []
+    for (const s of program.sessions) {
+      for (const ex of s.exercises) {
+        if (!seen.has(ex.name)) {
+          seen.add(ex.name)
+          list.push({ name: ex.name, muscleGroup: ex.muscleGroup })
+        }
+      }
+    }
+    return list.sort((a, b) => a.name.localeCompare(b.name))
+  }, [program])
 
   const { validated, total } = useMemo(() => {
     let v = 0
@@ -173,6 +224,34 @@ export function SessionActive() {
     })
   }
 
+  /** Ajoute un exercice à la volée (ponctuel, non mémorisé dans le programme) */
+  function addExtraExercise(data: { name: string; muscleGroup: string; sets: number }) {
+    const id = slugify(data.name) // même id que le programme → historique combiné
+    const last = lastPerf.get(id)
+    const defaultWeight = last?.sets[0]?.weight ?? 0
+    setLogs((prev) => [
+      ...prev,
+      {
+        exerciseId: id,
+        exerciseName: data.name,
+        muscleGroup: data.muscleGroup,
+        isExtra: true,
+        rest: EXTRA_DEFAULT_REST,
+        sets: Array.from({ length: data.sets }, () => ({
+          weight: defaultWeight,
+          reps: 0,
+          done: false,
+        })) as SetLog[],
+      },
+    ])
+    setShowAddForm(false)
+  }
+
+  /** Retire un exercice ajouté à la volée */
+  function removeExtra(exIndex: number) {
+    setLogs((prev) => prev.filter((_, i) => i !== exIndex))
+  }
+
   function restartSession() {
     setLogs(buildInitialLogs(session!, lastPerf))
     setResumed(false)
@@ -247,20 +326,40 @@ export function SessionActive() {
         </label>
       </header>
 
-      {/* Liste des exercices */}
+      {/* Liste des exercices — on itère sur les LOGS pour inclure les ajouts */}
       <div className="space-y-4">
-        {session.exercises.map((ex, exIndex) => {
-          const last = lastPerf.get(ex.id!)
+        {logs.map((log, exIndex) => {
+          const last = lastPerf.get(log.exerciseId)
+          const meta = metaById.get(log.exerciseId)
+          // Repos : du programme si connu, sinon celui de l'exercice ajouté
+          const rest = meta?.rest ?? log.rest ?? EXTRA_DEFAULT_REST
+          const targetWeight = meta?.targetWeight
           return (
-            <Card key={ex.id}>
-              <div className="flex items-baseline justify-between">
-                <h2 className="text-lg font-bold">{ex.name}</h2>
-                <span className="text-muted text-xs">{ex.muscleGroup}</span>
+            <Card key={`${log.exerciseId}-${exIndex}`}>
+              <div className="flex items-baseline justify-between gap-2">
+                <h2 className="text-lg font-bold">{log.exerciseName}</h2>
+                <span className="text-muted text-xs shrink-0">{log.muscleGroup}</span>
               </div>
               <p className="text-muted text-sm mt-0.5">
-                {ex.sets} × {ex.reps}
-                {ex.tempo ? ` · tempo ${ex.tempo}` : ''} · repos {ex.rest}s
+                {log.sets.length}
+                {meta ? ` × ${meta.reps}` : ' séries'}
+                {meta?.tempo ? ` · tempo ${meta.tempo}` : ''} · repos {rest}s
               </p>
+
+              {/* Étiquette + retrait pour un exercice ajouté à la volée */}
+              {log.isExtra && (
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-[11px] bg-accent-dim text-accent px-2 py-0.5 rounded-full">
+                    ajout ponctuel
+                  </span>
+                  <button
+                    onClick={() => removeExtra(exIndex)}
+                    className="text-xs text-red-400 active:text-red-300"
+                  >
+                    retirer
+                  </button>
+                </div>
+              )}
 
               {last && (
                 <p className="text-xs text-accent/80 mt-1">
@@ -269,7 +368,7 @@ export function SessionActive() {
                 </p>
               )}
 
-              <CollapsibleTips tips={ex.tips} />
+              <CollapsibleTips tips={meta?.tips} />
 
               <div className="grid grid-cols-[18px_1fr_1fr_48px] gap-2 mt-4 mb-1 text-[11px] text-muted uppercase tracking-wide">
                 <span></span>
@@ -279,7 +378,7 @@ export function SessionActive() {
               </div>
 
               <div className="space-y-2">
-                {logs[exIndex].sets.map((set, setIndex) => (
+                {log.sets.map((set, setIndex) => (
                   <div key={setIndex}>
                     <div className="grid grid-cols-[18px_1fr_1fr_48px] gap-2 items-center">
                       <span className="text-muted text-sm text-center">
@@ -289,7 +388,7 @@ export function SessionActive() {
                         value={set.weight}
                         step={WEIGHT_STEP}
                         onChange={(v) => updateSet(exIndex, setIndex, { weight: v })}
-                        placeholder={String(ex.targetWeight ?? 0)}
+                        placeholder={String(targetWeight ?? 0)}
                         dimmed={set.done}
                         aria-label="Poids en kg"
                       />
@@ -305,7 +404,7 @@ export function SessionActive() {
                         onClick={() =>
                           set.done
                             ? updateSet(exIndex, setIndex, { done: false })
-                            : validateSet(exIndex, setIndex, ex.rest)
+                            : validateSet(exIndex, setIndex, rest)
                         }
                         className={`w-full h-12 rounded-lg text-xl font-bold transition-all active:scale-95 ${
                           set.done
@@ -355,6 +454,24 @@ export function SessionActive() {
             </Card>
           )
         })}
+      </div>
+
+      {/* Ajout d'un exercice à la volée */}
+      <div className="mt-4">
+        {showAddForm ? (
+          <AddExerciseForm
+            knownExercises={knownExercises}
+            onAdd={addExtraExercise}
+            onCancel={() => setShowAddForm(false)}
+          />
+        ) : (
+          <button
+            onClick={() => setShowAddForm(true)}
+            className="w-full rounded-2xl border border-dashed border-border text-muted py-4 font-semibold active:bg-surface active:text-white"
+          >
+            + Ajouter un exercice
+          </button>
+        )}
       </div>
 
       {/* Bouton terminer → ouvre le résumé */}

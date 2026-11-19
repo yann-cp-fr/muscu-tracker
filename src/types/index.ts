@@ -58,6 +58,12 @@ export interface ExerciseLog {
   exerciseName: string
   muscleGroup: string
   sets: SetLog[]
+  /** true si l'exercice a été ajouté à la volée pendant la séance
+   *  (ajout ponctuel, non mémorisé dans le programme). */
+  isExtra?: boolean
+  /** repos en secondes pour cet exercice ajouté (les exercices du
+   *  programme tirent leur repos du programme, pas d'ici). */
+  rest?: number
 }
 
 /** Une séance complète enregistrée dans l'historique */
